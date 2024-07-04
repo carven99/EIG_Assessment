@@ -1,0 +1,111 @@
+<!-- Script for Adding the EmailJS SDK -->
+<!-- <script type="text/javascript" src="https://cdn.emailjs.com/dist/email.min.js"></script>
+<script type="text/javascript">
+  (function(){
+     emailjs.init("USER_ID");
+  })();
+</script> -->
+
+<form id="bookingForm">
+    <div class="page-width container">
+      <div class="form">
+        <h2>Book Now</h2>
+        <!-- FullName -->
+        <div class="field">
+          <input type="text" id="name" name="name" placeholder="Full Name" required>
+          <label for="name">Full Name</label>
+        </div>
+        <div id="nameError" class="error-message"></div>
+        <!-- Email -->
+        <div class="field">
+          <input type="email" id="email" name="email" placeholder="Email" required>
+          <label for="email">Email</label>
+        </div>
+        <div id="emailError" class="error-message"></div>
+        <!-- Phone Number -->
+        <div class="field">
+          <input type="tel" id="phoneNumber" name="phone" placeholder="Phone Number" required>
+          <label for="phone">Phone Number</label>
+        </div>
+        <div id="phoneError" class="error-message"></div>
+        <!-- Treatment -->
+        <label for="treatment">Treatment list*</label>
+        <div class="field">
+          <select id="treatment" name="treatment" required>
+            <option value="">Select treatment</option>
+            <option value="1">Treatment 1</option>
+            <option value="2">Treatment 2</option>
+            <option value="3">Treatment 3</option>
+          </select>
+        </div>
+        <div id="treatmentError" class="error-message"></div>
+        <div id="outer">
+          <button onclick="validateForm()" type="button" class="button_slide slide_down">
+            SUBMIT
+          </button>
+          <div id="form-result"></div>
+        </div>
+      </div>
+    </div>
+  </form>
+  <script>
+  function validateForm() {
+    // Clear previous error message
+    document.getElementById('nameError').innerText = '';
+    document.getElementById('emailError').innerText = '';
+    document.getElementById('phoneError').innerText = '';
+    document.getElementById('treatmentError').innerText = '';
+  
+    const fullName = document.querySelector('#name').value;
+    const senderEmail = document.querySelector('#email').value;
+    const phoneNumber = document.querySelector('#phoneNumber').value;
+    const treatmentName = document.querySelector('#treatment').value;
+  
+    // Email regex pattern
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    // Phone number regex pattern (basic validation for digits)
+    const phonePattern = /^\d{9,15}$/;
+  
+    let isValid = true;
+  
+    if (fullName === '') {
+      document.getElementById('nameError').innerText = '*Please enter your full name.*';
+      isValid = false;
+    }
+  
+    if (!emailPattern.test(senderEmail)) {
+      document.getElementById('emailError').innerText = '*Please enter a valid email address.*';
+      isValid = false;
+    }
+  
+    if (!phonePattern.test(phoneNumber)) {
+      document.getElementById('phoneError').innerText = '*Please enter a valid phone number with 9 to 15 digits.*';
+      isValid = false;
+    }
+  
+    if (treatmentName === '') {
+      document.getElementById('treatmentError').innerText = '*Please select a treatment.*';
+      isValid = false;
+    }
+  
+    if (isValid) {
+      sendEmail(fullName, senderEmail, phoneNumber, treatmentName);
+    }
+  }
+  
+  function sendEmail(fullName, senderEmail, phoneNumber, treatmentName) {
+    emailjs.send("SERVICE_ID", "TEMPLATE_ID", { /*Add emailjs SDK to help sending the email*/
+    name: fullName,
+    email: senderEmail,
+    phone: phoneNumber,
+    treatment: treatmentName
+  })
+  .then((response) => {
+    document.getElementById('form-result').innerText = 'Email sent successfully!';
+  })
+  .catch((error) => {
+    document.getElementById('form-result').innerText = 'Failed to send email.';
+  });
+  }
+  </script>
+  
